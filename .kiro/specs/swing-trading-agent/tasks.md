@@ -1,6 +1,6 @@
 # Implementation Plan
 
-- [ ] 1. Set up basic project structure
+- [-] 1. Set up basic project structure
   - Create monorepo structure with backend, frontend (Next.js), and shared directories
   - Set up TypeScript configuration for all packages
   - Configure Jest testing framework with fast-check for property-based testing
