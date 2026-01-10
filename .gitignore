@@ -9,6 +9,22 @@ dist/
 build/
 .next/
 
+# TypeScript compiled files (should only be in dist/)
+**/*.js
+**/*.d.ts
+**/*.js.map
+**/*.d.ts.map
+# But allow specific JS config files
+!*.config.js
+!jest.config.js
+!next.config.js
+!webpack.config.js
+!rollup.config.js
+!vite.config.js
+# And allow JS files in specific directories that should have them
+!node_modules/**/*.js
+!dist/**/*.js
+
 # Environment variables
 .env
 .env.local
