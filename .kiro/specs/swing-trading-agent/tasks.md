@@ -7,18 +7,18 @@
   - Create basic package.json files and build scripts
   - _Requirements: 7.1, 7.5_
 
-- [-] 2. Create core type definitions and interfaces
+- [x] 2. Create core type definitions and interfaces
   - Define all TypeScript interfaces in shared/types directory
   - Create core data models (Trade, Position, Portfolio, TradingSignal)
   - Add logging and LLM interaction interfaces
   - Set up basic configuration types and validation schemas
   - _Requirements: 7.1_
 
-- [ ]* 2.1 Write property test for configuration validation
+- [x] 2.1 Write property test for configuration validation
   - **Property 10: Configuration validation**
   - **Validates: Requirements 7.5**
 
-- [ ] 3. Implement and test database layer
+- [x] 3. Implement and test database layer
   - Set up SQLite database with basic schema
   - Create database models and migration scripts
   - Implement repository pattern for data access
@@ -26,7 +26,7 @@
   - Test database operations with unit tests
   - _Requirements: 6.1, 6.2, 6.4_
 
-- [ ] 3.1 Test database layer functionality
+- [x] 3.1 Test database layer functionality
   - Write unit tests for all repository operations
   - Test data persistence and retrieval
   - Verify database schema and constraints
