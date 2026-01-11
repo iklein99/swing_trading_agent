@@ -291,6 +291,7 @@ export class LogViewer {
       MARKET_DATA_SERVICE: 'MARKET',
       LLM_SERVICE: 'LLM',
       EXIT_CRITERIA_MONITOR: 'EXIT',
+      GUIDELINES_MANAGER: 'GUIDE',
       DATABASE: 'DB',
       API_SERVER: 'API',
       SCHEDULER: 'SCHED'

@@ -225,6 +225,7 @@ export class LoggingService implements LoggerInterface {
         MARKET_DATA_SERVICE: 0,
         LLM_SERVICE: 0,
         EXIT_CRITERIA_MONITOR: 0,
+        GUIDELINES_MANAGER: 0,
         DATABASE: 0,
         API_SERVER: 0,
         SCHEDULER: 0
@@ -296,6 +297,7 @@ export class LoggingService implements LoggerInterface {
           MARKET_DATA_SERVICE: 0,
           LLM_SERVICE: 0,
           EXIT_CRITERIA_MONITOR: 0,
+          GUIDELINES_MANAGER: 0,
           DATABASE: 0,
           API_SERVER: 0,
           SCHEDULER: 0

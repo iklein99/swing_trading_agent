@@ -6,14 +6,16 @@ The Swing Trading Agent is an autonomous trading system that executes swing trad
 
 ## Glossary
 
-- **Trading_Agent**: The autonomous system that executes trading decisions based on LLM reasoning and predefined guidelines
+- **Trading_Agent**: The autonomous system that executes trading decisions based on LLM reasoning and predefined trading guidelines
+- **Trading_Guidelines**: The comprehensive set of rules and criteria stored in `artifacts/swing_trading_guidelines.md` that define stock selection, entry/exit criteria, risk management, and position sizing rules
+- **Guidelines_Manager**: Component responsible for loading, validating, and providing access to trading guidelines from the configuration file
 - **Portfolio_Manager**: Component responsible for tracking positions, calculating performance metrics, and enforcing position sizing rules
-- **Signal_Generator**: LLM-powered component that analyzes market data and generates buy/sell signals based on trading guidelines
+- **Signal_Generator**: LLM-powered component that analyzes market data and generates buy/sell signals based on the loaded trading guidelines
 - **Market_Data_Service**: Service that retrieves real-time and historical market data from external APIs
 - **Trade_Executor**: Component that processes trading signals and executes mock trades through simulated API
 - **Web_Interface**: ReactJS application providing user access to system status, trades, and performance metrics
-- **Exit_Criteria_Monitor**: Component that continuously monitors positions for exit conditions based on stop losses and profit targets
-- **Risk_Manager**: Component that enforces portfolio-level risk limits and position sizing constraints
+- **Exit_Criteria_Monitor**: Component that continuously monitors positions for exit conditions based on stop losses and profit targets defined in trading guidelines
+- **Risk_Manager**: Component that enforces portfolio-level risk limits and position sizing constraints as specified in trading guidelines
 
 ## Requirements
 
@@ -31,17 +33,30 @@ The Swing Trading Agent is an autonomous trading system that executes swing trad
 
 ### Requirement 2
 
+**User Story:** As a system administrator, I want the trading system to load and follow configurable trading guidelines, so that I can modify trading strategies without changing code.
+
+#### Acceptance Criteria
+
+1. WHEN the system starts, THE Guidelines_Manager SHALL load trading guidelines from the `artifacts/swing_trading_guidelines.md` file
+2. WHEN the guidelines file is updated, THE Guidelines_Manager SHALL reload the guidelines without requiring system restart
+3. WHEN loading guidelines, THE Guidelines_Manager SHALL validate all required sections are present and properly formatted
+4. WHEN guidelines validation fails, THE Trading_Agent SHALL log the error and continue using the last valid guidelines
+5. WHEN generating trading signals, THE Signal_Generator SHALL reference the loaded guidelines for stock selection criteria, entry signals, and position sizing rules
+6. WHEN establishing exit criteria, THE Exit_Criteria_Monitor SHALL use the stop loss and profit target rules defined in the loaded guidelines
+
+### Requirement 3
+
 **User Story:** As a swing trader, I want the system to monitor exit criteria for all positions, so that profits are captured and losses are limited according to my trading plan.
 
 #### Acceptance Criteria
 
-1. WHEN a position is opened, THE Exit_Criteria_Monitor SHALL establish stop loss and profit target levels based on trading guidelines
+1. WHEN a position is opened, THE Exit_Criteria_Monitor SHALL establish stop loss and profit target levels based on the rules defined in the loaded trading guidelines
 2. WHEN any exit criteria is met for a position, THE Trading_Agent SHALL execute the exit trade immediately
-3. WHEN checking exit criteria, THE Exit_Criteria_Monitor SHALL evaluate stop losses before profit targets to prioritize risk management
+3. WHEN checking exit criteria, THE Exit_Criteria_Monitor SHALL evaluate stop losses before profit targets to prioritize risk management as specified in the guidelines
 4. WHEN multiple positions have exit criteria triggered simultaneously, THE Trading_Agent SHALL process all exits within the same execution cycle
 5. WHEN an exit trade is executed, THE Portfolio_Manager SHALL update position status and recalculate available capital
 
-### Requirement 3
+### Requirement 4
 
 **User Story:** As a swing trader, I want the system to follow a systematic execution order, so that trading decisions are made consistently and risk is managed properly.
 
@@ -54,19 +69,19 @@ The Swing Trading Agent is an autonomous trading system that executes swing trad
 5. WHEN the execution cycle completes, THE Trading_Agent SHALL log the cycle completion with timestamp and summary
 6. WHEN executing any step in the trading cycle, THE Trading_Agent SHALL log all actions, decisions, and reasoning in a structured format for comprehensive user interface display
 
-### Requirement 4
+### Requirement 5
 
 **User Story:** As a swing trader, I want the system to use market data to generate intelligent trading signals, so that trades are based on current market conditions and technical analysis.
 
 #### Acceptance Criteria
 
 1. WHEN generating trading signals, THE Signal_Generator SHALL retrieve current market data from the configured data provider
-2. WHEN analyzing stocks for trading opportunities, THE Signal_Generator SHALL apply the stock selection criteria from trading guidelines
-3. WHEN evaluating entry signals, THE Signal_Generator SHALL validate technical indicators and volume requirements specified in guidelines
+2. WHEN analyzing stocks for trading opportunities, THE Signal_Generator SHALL apply the stock selection criteria from the loaded trading guidelines including liquidity requirements, volatility metrics, price range, and technical setup requirements
+3. WHEN evaluating entry signals, THE Signal_Generator SHALL validate technical indicators and volume requirements specified in the loaded trading guidelines
 4. WHEN market data is unavailable or stale, THE Signal_Generator SHALL prevent signal generation and log the data issue
-5. WHEN generating signals, THE Signal_Generator SHALL provide reasoning for each trading recommendation in natural language
+5. WHEN generating signals, THE Signal_Generator SHALL provide reasoning for each trading recommendation in natural language based on the guidelines criteria that were met or failed
 
-### Requirement 5
+### Requirement 6
 
 **User Story:** As a swing trader, I want to monitor system status and trading activity through a web interface, so that I can track performance and ensure the system is operating correctly.
 
@@ -78,7 +93,7 @@ The Swing Trading Agent is an autonomous trading system that executes swing trad
 4. WHEN reviewing performance metrics, THE Web_Interface SHALL show portfolio value, returns, trade statistics, and win/loss ratios
 5. WHEN the system is not operational, THE Web_Interface SHALL clearly indicate system status and any error conditions
 
-### Requirement 6
+### Requirement 7
 
 **User Story:** As a swing trader, I want the system to maintain detailed records of all trading activities, so that I can analyze performance and refine my trading strategy.
 
@@ -90,7 +105,7 @@ The Swing Trading Agent is an autonomous trading system that executes swing trad
 4. WHEN updating portfolio data, THE Portfolio_Manager SHALL maintain historical snapshots for performance tracking over time
 5. WHEN the system starts, THE Portfolio_Manager SHALL load existing portfolio state from the database and validate data integrity
 
-### Requirement 7
+### Requirement 8
 
 **User Story:** As a system administrator, I want the trading system to be modular and configurable, so that I can easily modify LLM providers and trading parameters without system redesign.
 
@@ -102,17 +117,18 @@ The Swing Trading Agent is an autonomous trading system that executes swing trad
 4. WHEN integrating new data sources, THE Market_Data_Service SHALL support provider switching through configuration changes
 5. WHEN the system initializes, THE Trading_Agent SHALL validate all configuration parameters and report any invalid settings
 
-### Requirement 8
+### Requirement 9
 
 **User Story:** As a swing trader, I want the system to enforce risk management rules automatically, so that my portfolio is protected from excessive losses and overconcentration.
 
 #### Acceptance Criteria
 
-1. WHEN calculating position size, THE Risk_Manager SHALL limit individual trade risk to 1-2% of total portfolio value
-2. WHEN the portfolio experiences a daily loss exceeding 3%, THE Risk_Manager SHALL halt all new trading for the remainder of the day
-3. WHEN evaluating new positions, THE Risk_Manager SHALL prevent trades that would create sector concentration exceeding 30% of portfolio
-4. WHEN portfolio drawdown reaches 5-8% from peak, THE Risk_Manager SHALL reduce position sizes for subsequent trades
-### Requirement 9
+1. WHEN calculating position size, THE Risk_Manager SHALL limit individual trade risk to 1-2% of total portfolio value as specified in the loaded trading guidelines
+2. WHEN the portfolio experiences a daily loss exceeding the maximum daily loss limit defined in the trading guidelines, THE Risk_Manager SHALL halt all new trading for the remainder of the day
+3. WHEN evaluating new positions, THE Risk_Manager SHALL prevent trades that would create sector concentration exceeding the maximum sector exposure defined in the trading guidelines
+4. WHEN portfolio drawdown reaches the maximum drawdown threshold specified in the trading guidelines, THE Risk_Manager SHALL reduce position sizes for subsequent trades
+
+### Requirement 10
 
 **User Story:** As a swing trader, I want to view detailed logs of all system activities including LLM interactions, so that I can understand the reasoning behind every trading decision and troubleshoot any issues.
 

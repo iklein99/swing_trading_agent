@@ -29,6 +29,7 @@ export interface TradingSignal {
   reasoning: string;
   technicalIndicators: TechnicalData;
   recommendedSize: number;
+  entryPrice?: number;
   stopLoss: number;
   profitTargets: number[];
   timestamp: Date;

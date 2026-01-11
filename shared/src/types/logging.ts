@@ -11,6 +11,7 @@ export type ComponentType =
   | 'MARKET_DATA_SERVICE' 
   | 'LLM_SERVICE' 
   | 'EXIT_CRITERIA_MONITOR'
+  | 'GUIDELINES_MANAGER'
   | 'DATABASE'
   | 'API_SERVER'
   | 'SCHEDULER';
