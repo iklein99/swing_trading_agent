@@ -25,3 +25,12 @@ export type {
   StopLossRules,
   ProfitTargetMethods
 } from './guidelines-manager';
+export { 
+  PortfolioManager, 
+  PortfolioManagerError, 
+  createPortfolioManager 
+} from './portfolio-manager';
+export type { 
+  PortfolioManagerConfig, 
+  MockBrokerConfig 
+} from './portfolio-manager';

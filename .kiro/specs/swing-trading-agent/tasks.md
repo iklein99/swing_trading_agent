@@ -113,7 +113,7 @@
   - Update existing interfaces to reference guidelines where appropriate
   - _Requirements: 2.5, 2.6_
 
-- [ ] 7. Implement and test portfolio manager (core functionality)
+- [x] 7. Implement and test portfolio manager (core functionality)
   - Create PortfolioManager class with basic position tracking
   - Implement portfolio state persistence and loading
   - Add basic performance metrics calculation
@@ -125,7 +125,7 @@
   - **Property 6: Portfolio state consistency**
   - **Validates: Requirements 1.4, 7.1**
 
-- [ ] 7.2 Test portfolio manager functionality
+- [x] 7.2 Test portfolio manager functionality
   - Write unit tests for position tracking and updates
   - Test portfolio persistence and loading
   - Verify performance metrics calculations
