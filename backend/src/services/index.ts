@@ -34,3 +34,17 @@ export type {
   PortfolioManagerConfig, 
   MockBrokerConfig 
 } from './portfolio-manager';
+export {
+  RiskManager,
+  RiskManagerError,
+  createRiskManager
+} from './risk-manager';
+export type {
+  RiskManagerConfig,
+  RiskValidation,
+  RiskCheck,
+  RiskLimits,
+  RiskMetrics,
+  PositionRisk,
+  RiskEvent
+} from './risk-manager';

@@ -113,6 +113,64 @@
   - Update existing interfaces to reference guidelines where appropriate
   - _Requirements: 2.5, 2.6_
 
+- [ ] 6.7. Simplify GuidelinesManager to use structured configuration
+  - Convert markdown-based guidelines to structured YAML/JSON format
+  - Simplify parsing logic by removing markdown parsing complexity
+  - Improve maintainability and reduce parsing errors
+  - _Requirements: 2.1, 2.2, 2.3_
+
+- [ ] 6.7.1 Create structured guidelines configuration file
+  - Read the existing `artifacts/swing_trading_guidelines.md` file
+  - Extract ONLY configurable parameters (thresholds, limits, percentages, ranges)
+  - Examples of what to extract: minimum volume (1M shares), ATR range (2-8%), max position (10%)
+  - Examples of what NOT to extract: logic like "use 20-day and 50-day MA to determine trend"
+  - Create a new `artifacts/swing_trading_guidelines.yaml` (or .json) file
+  - Structure the configuration to match the TradingGuidelines TypeScript interface
+  - Include all sections: stock selection, entry signals, exit criteria, risk management
+  - Add comments in YAML explaining what each parameter controls (not how it's used)
+  - Keep the configuration focused on "what" (values) not "how" (logic)
+  - Validate the structure matches the TypeScript types exactly
+  - _Requirements: 2.1, 2.5_
+
+- [ ] 6.7.2 Update GuidelinesManager to load YAML/JSON
+  - Remove markdown parsing logic from GuidelinesManager
+  - Add YAML/JSON parsing using appropriate library (js-yaml or native JSON)
+  - Update loadGuidelines() method to read structured configuration file
+  - Simplify parseGuidelinesFromMarkdown() to parseGuidelinesFromYaml()
+  - Remove all regex-based extraction methods (extractLiquidityRequirements, etc.)
+  - Replace with simple YAML/JSON deserialization into TypeScript types
+  - Keep validation logic intact (validate ranges, required fields, etc.)
+  - Update file path configuration to point to new file
+  - Note: Trading logic (how to use these parameters) stays in other services
+  - _Requirements: 2.1, 2.2_
+
+- [ ] 6.7.3 Update GuidelinesManager tests
+  - Update test fixtures to use YAML/JSON format instead of markdown
+  - Remove tests for markdown parsing logic
+  - Add tests for YAML/JSON parsing
+  - Test validation with structured format
+  - Test file watching with new file format
+  - Ensure all existing test scenarios still pass
+  - _Requirements: 2.1, 2.2, 2.3_
+
+- [ ] 6.7.4 Update documentation and configuration
+  - Update README or documentation to reference new guidelines file format
+  - Document the separation: configuration file has parameters, code has logic
+  - Add example showing what belongs in config vs. what belongs in code
+  - Add example guidelines YAML/JSON file if needed
+  - Update any configuration files that reference the guidelines path
+  - Keep the original markdown file for reference (rename to .md.backup or .md.reference)
+  - Add migration notes explaining the new structure
+  - _Requirements: 2.4_
+
+- [ ] 6.7.5 Verify integration with RiskManager and other services
+  - Test that RiskManager still receives correct guidelines
+  - Verify all guidelines-dependent services work correctly
+  - Run integration tests to ensure no regressions
+  - Test hot-reload functionality with new file format
+  - Ensure all tests pass before proceeding
+  - _Requirements: 2.1, 2.2, 2.4_
+
 - [x] 7. Implement and test portfolio manager (core functionality)
   - Create PortfolioManager class with basic position tracking
   - Implement portfolio state persistence and loading
@@ -131,7 +189,7 @@
   - Verify performance metrics calculations
   - Ensure all tests pass before proceeding
 
-- [ ] 8. Implement and test risk manager with guidelines integration
+- [x] 8. Implement and test risk manager with guidelines integration
   - Create RiskManager class with position sizing logic based on loaded guidelines
   - Implement position limits and risk calculations using guidelines rules
   - Add risk validation for trades using guidelines-defined limits
@@ -156,7 +214,7 @@
   - **Property 9: Sector concentration limits**
   - **Validates: Requirements 9.3**
 
-- [ ] 8.5 Test risk manager functionality
+- [x] 8.5 Test risk manager functionality
   - Write unit tests for position sizing and limits using guidelines
   - Test trade validation and rejection scenarios with various guidelines
   - Test guidelines integration and dynamic rule updates
