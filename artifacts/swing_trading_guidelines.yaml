@@ -1,0 +1,199 @@
+# Swing Trading Guidelines Configuration
+# This file contains configurable parameters for the swing trading system.
+# Trading logic (how to use these parameters) is implemented in the code.
+
+version: "1.0.0"
+lastUpdated: "2025-01-14"
+
+# Stock Selection Criteria - Configurable thresholds and limits
+stockSelection:
+  liquidityRequirements:
+    minimumAverageDailyVolume: 1000000  # shares
+    minimumMarketCap: 500000000  # $500M
+    maxBidAskSpreadPercent: 0.5  # 0.5% of stock price
+  
+  volatilityMetrics:
+    atrRange:
+      min: 2.0  # 2% of stock price (14-day period)
+      max: 8.0  # 8% of stock price
+    historicalVolatilityRange:
+      min: 20.0  # 20% annualized
+      max: 60.0  # 60% annualized
+    betaRange:
+      min: 0.8  # relative to market
+      max: 2.0
+  
+  priceRange:
+    minPrice: 10.0  # $10 per share
+    maxPrice: 500.0  # $500 per share
+  
+  technicalSetupRequirements:
+    requireClearTrend: true  # Stock should be in defined trend
+    requireSupportResistance: true  # Identifiable key levels required
+    requireVolumeConfirmation: true  # Volume increase during moves
+    maxATRExtension: 3.0  # Max ATR away from key moving averages
+  
+  fundamentalFilters:
+    avoidEarningsWithinDays: 5  # Avoid trades 3-5 days before earnings
+    checkMajorNews: true  # Check for pending major news
+    requirePositiveSectorStrength: true  # Sector performance check
+    avoidFinancialDistress: true  # Avoid bankruptcy risk companies
+
+# Entry Signal Criteria - Configurable parameters for entry signals
+entrySignals:
+  longEntries:
+    - name: "Breakout Entry"
+      type: "BREAKOUT"
+      conditions:
+        - "Price breaks above resistance"
+        - "Volume >150% of average"
+        - "Close above resistance for 2 periods"
+      volumeRequirement: 1.5  # 150% of average volume
+      confirmationRequired: true
+      riskRewardRatio: 2.0  # Minimum 2:1 R:R
+    
+    - name: "Pullback Entry"
+      type: "PULLBACK"
+      conditions:
+        - "Stock in uptrend"
+        - "Price pulls back to support"
+        - "Reversal signal present"
+      volumeRequirement: 1.0  # 100% of average volume
+      confirmationRequired: true
+      riskRewardRatio: 2.0
+    
+    - name: "Moving Average Bounce"
+      type: "MOVING_AVERAGE_BOUNCE"
+      conditions:
+        - "Price approaches MA"
+        - "RSI oversold"
+        - "Price moves away from MA"
+      volumeRequirement: 1.0
+      confirmationRequired: false
+      riskRewardRatio: 2.0
+    
+    - name: "Momentum Entry"
+      type: "MOMENTUM"
+      conditions:
+        - "MACD crosses above signal"
+        - "RSI crosses above 50"
+        - "Price above VWAP"
+      volumeRequirement: 1.0
+      confirmationRequired: false
+      riskRewardRatio: 2.0
+  
+  shortEntries:
+    - name: "Breakdown Entry"
+      type: "BREAKOUT"
+      conditions:
+        - "Price breaks below support"
+        - "Volume >150% of average"
+        - "Close below support for 2 periods"
+      volumeRequirement: 1.5
+      confirmationRequired: true
+      riskRewardRatio: 2.0
+  
+  timingRules:
+    avoidFirstMinutes: 15  # Avoid first 15 minutes after open
+    avoidLastMinutes: 15  # Avoid last 15 minutes before close
+    optimalWindowStart: "10:00 AM"  # ET
+    optimalWindowEnd: "3:30 PM"  # ET
+  
+  positionSizing:
+    riskPerTradePercent: 2.0  # 1-2% of portfolio per trade
+    maxPositionPercent: 10.0  # Max 10% of portfolio per position
+    maxCorrelatedPositions: 3  # Max positions in correlated stocks
+    maxSectorPositions: 3  # Max positions per sector
+
+# Exit Criteria - Profit targets and stop losses
+exitCriteria:
+  profitTargets:
+    - name: "ATR-Based Targets"
+      method: "ATR_BASED"
+      targets:
+        - level: 1
+          calculation: "Entry + (1.5 × ATR)"
+          exitPercentage: 33  # Take 33% profit
+        - level: 2
+          calculation: "Entry + (2.5 × ATR)"
+          exitPercentage: 33
+        - level: 3
+          calculation: "Entry + (4.0 × ATR)"
+          exitPercentage: 34  # Remaining position
+      partialExitStrategy:
+        scaleOutApproach: true
+        target1ExitPercent: 33
+        target2ExitPercent: 33
+        trailRemainder: true
+    
+    - name: "Risk/Reward Ratio"
+      method: "RISK_REWARD"
+      targets:
+        - level: 1
+          calculation: "2:1 R:R minimum"
+          exitPercentage: 50
+        - level: 2
+          calculation: "3:1 R:R preferred"
+          exitPercentage: 50
+      partialExitStrategy:
+        scaleOutApproach: true
+        target1ExitPercent: 50
+        target2ExitPercent: 50
+        trailRemainder: true
+  
+  stopLosses:
+    methods:
+      - name: "Below Support"
+        type: "BELOW_SUPPORT"
+        calculation: "1-2% below support level"
+        bufferPercent: 2.0  # 1-2% buffer
+      - name: "ATR-Based"
+        type: "ATR_BASED"
+        calculation: "Entry - (1.0-1.5 × ATR)"
+        bufferPercent: 0.0
+      - name: "Percentage"
+        type: "PERCENTAGE"
+        calculation: "5-8% below entry"
+        bufferPercent: 8.0  # 5-8% below entry
+    maxRiskPercent: 2.0  # Max 2% account risk per trade
+    breakEvenRule:
+      activateAtRiskRewardRatio: 1.5  # Move to break-even at 1.5:1
+      moveToBreakEven: true
+    timeBasedStop:
+      maxHoldingDays: 15  # Max 5-15 trading days
+      evaluateAtTimeLimit: true
+  
+  trailingStops:
+    activationTrigger: "After Target 1 or Target 2 hit"
+    trailingAmount: "1.5-2.0 × ATR below current high"
+    adjustmentFrequency: "DAILY"
+    lockInProfitsAt: 1.5  # Lock in profits at 1.5:1 R:R
+  
+  timeBasedExits:
+    maxHoldingPeriod: 15  # Maximum 5-15 trading days
+    evaluationCriteria:
+      - "No progress toward targets"
+      - "Positive movement with trail stop"
+
+# Risk Management Rules - Portfolio-level risk parameters
+riskManagement:
+  portfolioRules:
+    maxDailyLossPercent: 3.0  # Stop trading if 3% daily loss
+    maxWeeklyLossPercent: 6.0  # Reduce sizes if 6% weekly loss
+    maxDrawdownPercent: 8.0  # Max 5-8% drawdown from peak
+    maxOpenPositions: 8  # 5-8 positions for diversification
+    maxSectorExposurePercent: 30.0  # Max 30% per sector
+    maxPositionSizePercent: 10.0  # Max 10% per position
+    riskPerTradePercent: 2.0  # 1-2% risk per trade
+  
+  tradeManagement:
+    noRevengeTrading: true  # Don't re-enter after stop loss
+    noAveragingDown: true  # Don't add to losing positions
+    scaleInCarefully: true  # Only add to winners with confirmation
+    reviewEachTrade: true  # Log and review all trades
+  
+  marketEnvironment:
+    trendingMarketStrategy: "Favor breakout/breakdown strategies, wider targets"
+    rangeBoundMarketStrategy: "Favor pullback strategies, tighter targets"
+    highVolatilityAdjustments: "Reduce position sizes, widen stops, quicker profit-taking"
+    lowVolatilityAdjustments: "Can use tighter stops, but expect smaller moves"

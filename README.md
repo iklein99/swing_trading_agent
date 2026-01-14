@@ -34,7 +34,34 @@ The Swing Trading Agent is a TypeScript-based system that combines LLM-powered m
 - `backend/` - Node.js/TypeScript trading engine and API
 - `frontend/` - Next.js web interface
 - `shared/` - Common types and utilities
+- `artifacts/` - Trading guidelines and configuration files
 - `.kiro/specs/` - Feature specifications and implementation plan
+
+## Trading Guidelines
+
+The system uses a structured YAML configuration file (`artifacts/swing_trading_guidelines.yaml`) to define trading parameters and rules. This configuration file contains:
+
+- **Stock Selection Criteria**: Liquidity requirements, volatility metrics, price ranges
+- **Entry Signals**: Technical indicators and confirmation requirements
+- **Exit Criteria**: Stop loss methods, profit targets, trailing stops
+- **Risk Management**: Position limits, daily loss limits, sector concentration rules
+
+### Configuration vs. Logic
+
+The guidelines file contains **configurable parameters** (the "what"):
+- Thresholds: `minimumAverageDailyVolume: 1000000`
+- Limits: `maxPositionSizePercent: 10`
+- Ranges: `atrPercentRange: { min: 2, max: 8 }`
+- Percentages: `dailyLossLimit: 3`
+
+The **trading logic** (the "how") remains in the code:
+- How to calculate moving averages to determine trends
+- How to combine multiple indicators for signal generation
+- How to prioritize exit criteria when multiple conditions are met
+
+### Hot-Reload Support
+
+The GuidelinesManager service watches the configuration file for changes and automatically reloads updated parameters without requiring a system restart. This allows for dynamic adjustment of trading rules during operation.
 
 ## Getting Started
 

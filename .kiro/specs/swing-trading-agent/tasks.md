@@ -113,13 +113,13 @@
   - Update existing interfaces to reference guidelines where appropriate
   - _Requirements: 2.5, 2.6_
 
-- [ ] 6.7. Simplify GuidelinesManager to use structured configuration
+- [x] 6.7. Simplify GuidelinesManager to use structured configuration
   - Convert markdown-based guidelines to structured YAML/JSON format
   - Simplify parsing logic by removing markdown parsing complexity
   - Improve maintainability and reduce parsing errors
   - _Requirements: 2.1, 2.2, 2.3_
 
-- [ ] 6.7.1 Create structured guidelines configuration file
+- [x] 6.7.1 Create structured guidelines configuration file
   - Read the existing `artifacts/swing_trading_guidelines.md` file
   - Extract ONLY configurable parameters (thresholds, limits, percentages, ranges)
   - Examples of what to extract: minimum volume (1M shares), ATR range (2-8%), max position (10%)
@@ -132,7 +132,7 @@
   - Validate the structure matches the TypeScript types exactly
   - _Requirements: 2.1, 2.5_
 
-- [ ] 6.7.2 Update GuidelinesManager to load YAML/JSON
+- [x] 6.7.2 Update GuidelinesManager to load YAML/JSON
   - Remove markdown parsing logic from GuidelinesManager
   - Add YAML/JSON parsing using appropriate library (js-yaml or native JSON)
   - Update loadGuidelines() method to read structured configuration file
@@ -144,7 +144,7 @@
   - Note: Trading logic (how to use these parameters) stays in other services
   - _Requirements: 2.1, 2.2_
 
-- [ ] 6.7.3 Update GuidelinesManager tests
+- [x] 6.7.3 Update GuidelinesManager tests
   - Update test fixtures to use YAML/JSON format instead of markdown
   - Remove tests for markdown parsing logic
   - Add tests for YAML/JSON parsing
@@ -153,7 +153,7 @@
   - Ensure all existing test scenarios still pass
   - _Requirements: 2.1, 2.2, 2.3_
 
-- [ ] 6.7.4 Update documentation and configuration
+- [x] 6.7.4 Update documentation and configuration
   - Update README or documentation to reference new guidelines file format
   - Document the separation: configuration file has parameters, code has logic
   - Add example showing what belongs in config vs. what belongs in code
@@ -163,7 +163,7 @@
   - Add migration notes explaining the new structure
   - _Requirements: 2.4_
 
-- [ ] 6.7.5 Verify integration with RiskManager and other services
+- [x] 6.7.5 Verify integration with RiskManager and other services
   - Test that RiskManager still receives correct guidelines
   - Verify all guidelines-dependent services work correctly
   - Run integration tests to ensure no regressions

@@ -81,7 +81,7 @@ describe('GuidelinesManager', () => {
     
     loggingService = createLoggingService(db, 'GUIDELINES_MANAGER');
     
-    testGuidelinesPath = 'test-guidelines.md';
+    testGuidelinesPath = 'test-guidelines.yaml';
     
     const config: GuidelinesManagerConfig = {
       guidelinesFilePath: testGuidelinesPath,
@@ -91,136 +91,187 @@ describe('GuidelinesManager', () => {
     };
     
     guidelinesManager = new GuidelinesManager(loggingService, config);
-    // Mock guidelines content
+    
+    // Mock YAML guidelines content
     mockGuidelinesContent = `
-# Swing Trading Guidelines
+version: "1.0.0"
+lastUpdated: "2025-01-14"
 
-## 1. Stock Selection Criteria
+stockSelection:
+  liquidityRequirements:
+    minimumAverageDailyVolume: 1000000
+    minimumMarketCap: 500000000
+    maxBidAskSpreadPercent: 0.5
+  
+  volatilityMetrics:
+    atrRange:
+      min: 2.0
+      max: 8.0
+    historicalVolatilityRange:
+      min: 20.0
+      max: 60.0
+    betaRange:
+      min: 0.8
+      max: 2.0
+  
+  priceRange:
+    minPrice: 10.0
+    maxPrice: 500.0
+  
+  technicalSetupRequirements:
+    requireClearTrend: true
+    requireSupportResistance: true
+    requireVolumeConfirmation: true
+    maxATRExtension: 3.0
+  
+  fundamentalFilters:
+    avoidEarningsWithinDays: 5
+    checkMajorNews: true
+    requirePositiveSectorStrength: true
+    avoidFinancialDistress: true
 
-### 1.1 Liquidity Requirements
-- **Minimum Average Daily Volume**: 1,000,000 shares
-- **Minimum Market Cap**: $500M (mid-cap and above)
-- **Bid-Ask Spread**: < 0.5% of stock price
+entrySignals:
+  longEntries:
+    - name: "Breakout Entry"
+      type: "BREAKOUT"
+      conditions:
+        - "Price breaks above resistance"
+        - "Volume >150% of average"
+      volumeRequirement: 1.5
+      confirmationRequired: true
+      riskRewardRatio: 2.0
+    
+    - name: "Pullback Entry"
+      type: "PULLBACK"
+      conditions:
+        - "Stock in uptrend"
+      volumeRequirement: 1.0
+      confirmationRequired: true
+      riskRewardRatio: 2.0
+    
+    - name: "Moving Average Bounce"
+      type: "MOVING_AVERAGE_BOUNCE"
+      conditions:
+        - "Price approaches MA"
+      volumeRequirement: 1.0
+      confirmationRequired: false
+      riskRewardRatio: 2.0
+    
+    - name: "Momentum Entry"
+      type: "MOMENTUM"
+      conditions:
+        - "MACD crosses above signal"
+      volumeRequirement: 1.0
+      confirmationRequired: false
+      riskRewardRatio: 2.0
+  
+  shortEntries:
+    - name: "Breakdown Entry"
+      type: "BREAKOUT"
+      conditions:
+        - "Price breaks below support"
+      volumeRequirement: 1.5
+      confirmationRequired: true
+      riskRewardRatio: 2.0
+  
+  timingRules:
+    avoidFirstMinutes: 15
+    avoidLastMinutes: 15
+    optimalWindowStart: "10:00 AM"
+    optimalWindowEnd: "3:30 PM"
+  
+  positionSizing:
+    riskPerTradePercent: 2.0
+    maxPositionPercent: 10.0
+    maxCorrelatedPositions: 3
+    maxSectorPositions: 3
 
-### 1.2 Volatility Metrics
-- **Average True Range (ATR)**: 2-8% of stock price (14-day period)
-- **Historical Volatility**: 20-60% annualized
-- **Beta**: 0.8 - 2.0 (relative to market)
+exitCriteria:
+  profitTargets:
+    - name: "ATR-Based Targets"
+      method: "ATR_BASED"
+      targets:
+        - level: 1
+          calculation: "Entry + (1.5 × ATR)"
+          exitPercentage: 33
+        - level: 2
+          calculation: "Entry + (2.5 × ATR)"
+          exitPercentage: 33
+        - level: 3
+          calculation: "Entry + (4.0 × ATR)"
+          exitPercentage: 34
+      partialExitStrategy:
+        scaleOutApproach: true
+        target1ExitPercent: 33
+        target2ExitPercent: 33
+        trailRemainder: true
+    
+    - name: "Risk/Reward Ratio"
+      method: "RISK_REWARD"
+      targets:
+        - level: 1
+          calculation: "2:1 R:R minimum"
+          exitPercentage: 50
+      partialExitStrategy:
+        scaleOutApproach: true
+        target1ExitPercent: 50
+        target2ExitPercent: 50
+        trailRemainder: true
+  
+  stopLosses:
+    methods:
+      - name: "Below Support"
+        type: "BELOW_SUPPORT"
+        calculation: "1-2% below support level"
+        bufferPercent: 2.0
+      - name: "ATR-Based"
+        type: "ATR_BASED"
+        calculation: "Entry - (1.0-1.5 × ATR)"
+        bufferPercent: 0.0
+      - name: "Percentage"
+        type: "PERCENTAGE"
+        calculation: "5-8% below entry"
+        bufferPercent: 8.0
+    maxRiskPercent: 2.0
+    breakEvenRule:
+      activateAtRiskRewardRatio: 1.5
+      moveToBreakEven: true
+    timeBasedStop:
+      maxHoldingDays: 15
+      evaluateAtTimeLimit: true
+  
+  trailingStops:
+    activationTrigger: "After Target 1 or Target 2 hit"
+    trailingAmount: "1.5-2.0 × ATR below current high"
+    adjustmentFrequency: "DAILY"
+    lockInProfitsAt: 1.5
+  
+  timeBasedExits:
+    maxHoldingPeriod: 15
+    evaluationCriteria:
+      - "No progress toward targets"
 
-### 1.3 Price Range
-- **Stock Price**: $10 - $500 per share
-
-### 1.4 Technical Setup Requirements
-- **Clear Trend**: Stock should be in a defined uptrend or downtrend
-- **Support/Resistance Levels**: Identifiable key levels
-- **Volume Confirmation**: Recent volume increase during price moves
-- **Not Extended**: Price should not be >3 ATR away from key moving averages
-
-### 1.5 Fundamental Filters (Optional but Recommended)
-- **Avoid**: Companies with upcoming earnings within 3-5 days
-- **News Check**: No major pending news events
-- **Sector Strength**: Relative sector performance positive or neutral
-- **Financial Health**: Avoid companies with bankruptcy risk
-
-## 2. Entry Criteria
-
-### 2.1 Technical Entry Signals
-
-#### Long (Buy) Entries
-1. **Breakout Entry**
-   - Price breaks above resistance with volume >150% of average
-   - Confirmation: Close above resistance for 2 consecutive periods
-
-2. **Pullback Entry**
-   - Stock in uptrend (price above 20-day and 50-day MA)
-   - Price pulls back to support level or moving average
-
-3. **Moving Average Bounce**
-   - Price approaches 20-day or 50-day EMA in an uptrend
-   - RSI (14) oversold (<40) or reaching support zone
-
-4. **Momentum Entry**
-   - MACD crosses above signal line
-   - RSI crosses above 50 (from below)
-   - Price above VWAP
-
-#### Short (Sell) Entries
-1. **Breakdown Entry**
-   - Price breaks below support with volume >150% of average
-   - Confirmation: Close below support for 2 consecutive periods
-
-### 2.2 Entry Timing
-- **Time of Day**: Avoid first 15 minutes (9:30-9:45 AM ET) and last 15 minutes of trading
-- **Optimal Window**: 10:00 AM - 3:30 PM ET
-
-### 2.3 Position Sizing
-- **Risk Per Trade**: 1-2% of total portfolio value
-- **Maximum Position**: No single position should exceed 10% of portfolio
-
-## 3. Exit Criteria - Take Profit Targets
-
-### 3.1 Target Setting Methods
-
-#### Method 1: ATR-Based Targets
-- **Target 1**: Entry + (1.5 × ATR) - Take 33% profit
-- **Target 2**: Entry + (2.5 × ATR) - Take 33% profit
-- **Target 3**: Entry + (4.0 × ATR) - Take remaining position
-
-#### Method 4: Risk/Reward Ratio
-- **Minimum R:R**: 2:1 (profit target is 2× the risk)
-- **Preferred R:R**: 3:1 or higher
-
-### 3.2 Partial Profit Taking Strategy
-- **Scale Out Approach**: Recommended for reducing risk
-  - Exit 33% at Target 1
-  - Exit 33% at Target 2
-  - Trail stop on remaining 33%
-
-### 3.3 Trailing Stop Strategy
-- **Activation**: After Target 1 or Target 2 is hit
-- **Trailing Amount**: 1.5-2.0 × ATR below current high (for longs)
-- **Lock in Profits**: Move stop to break-even after 1.5:1 R:R is achieved
-
-## 4. Exit Criteria - Stop Losses
-
-### 4.1 Initial Stop Loss Placement
-
-#### For Long Positions
-- **Below Support**: 1-2% below identified support level
-- **ATR-Based**: Entry - (1.0-1.5 × ATR)
-- **Percentage**: 5-8% below entry (adjust based on volatility)
-
-### 4.2 Stop Loss Rules
-- **Always Use Stops**: Never enter a position without a predefined stop loss
-- **Wide Enough**: Stop should be beyond normal price noise
-- **Not Too Wide**: If required stop exceeds 2% account risk, reduce position size
-
-### 4.3 Break-Even Stop
-- **When**: After price moves favorably by 1.5× initial risk
-- **Action**: Move stop loss to entry price (zero loss point)
-
-### 4.4 Time-Based Stop
-- **Holding Period**: Maximum 5-15 trading days (swing trade duration)
-
-## 6. Risk Management Rules
-
-### 6.1 Overall Portfolio Rules
-- **Maximum Daily Loss**: 3% of portfolio - stop trading for the day if hit
-- **Maximum Weekly Loss**: 6% of portfolio - reduce position sizes if hit
-- **Maximum Open Positions**: 5-8 positions (for diversification)
-- **Maximum Risk Per Sector**: 30% of portfolio
-
-### 6.2 Trade Management Rules
-- **Review Each Trade**: Log entry reason, exit plan, and actual results
-- **No Revenge Trading**: Don't immediately re-enter after a stop loss
-- **No Averaging Down**: Don't add to losing positions
-- **Scale In Carefully**: If adding to winners, only after confirmation
-
-### 6.3 Market Environment Adaptation
-- **Trending Market**: Favor breakout/breakdown strategies, wider targets
-- **Range-Bound Market**: Favor pullback strategies, tighter targets
-- **High Volatility**: Reduce position sizes, widen stops, quicker profit-taking
-- **Low Volatility**: Can use tighter stops, but expect smaller moves
+riskManagement:
+  portfolioRules:
+    maxDailyLossPercent: 3.0
+    maxWeeklyLossPercent: 6.0
+    maxDrawdownPercent: 8.0
+    maxOpenPositions: 8
+    maxSectorExposurePercent: 30.0
+    maxPositionSizePercent: 10.0
+    riskPerTradePercent: 2.0
+  
+  tradeManagement:
+    noRevengeTrading: true
+    noAveragingDown: true
+    scaleInCarefully: true
+    reviewEachTrade: true
+  
+  marketEnvironment:
+    trendingMarketStrategy: "Favor breakout strategies"
+    rangeBoundMarketStrategy: "Favor pullback strategies"
+    highVolatilityAdjustments: "Reduce position sizes"
+    lowVolatilityAdjustments: "Tighter stops"
 `;
 
     // Setup mock file system responses
@@ -233,10 +284,11 @@ describe('GuidelinesManager', () => {
     guidelinesManager.dispose();
     await db.close();
   });
+
   describe('Service Initialization', () => {
     test('should initialize with correct configuration', () => {
       const config: GuidelinesManagerConfig = {
-        guidelinesFilePath: 'custom-guidelines.md',
+        guidelinesFilePath: 'custom-guidelines.yaml',
         watchForChanges: true,
         backupOnLoad: true,
         validateOnLoad: false
@@ -248,14 +300,14 @@ describe('GuidelinesManager', () => {
 
     test('should create service using factory function', () => {
       const manager = createGuidelinesManager(loggingService, { 
-        guidelinesFilePath: 'factory-test.md' 
+        guidelinesFilePath: 'factory-test.yaml' 
       });
       expect(manager).toBeDefined();
     });
   });
 
   describe('Guidelines Loading', () => {
-    test('should load guidelines from file successfully', async () => {
+    test('should load guidelines from YAML file successfully', async () => {
       const guidelines = await guidelinesManager.loadGuidelines();
       
       expect(guidelines).toBeDefined();
@@ -263,7 +315,7 @@ describe('GuidelinesManager', () => {
       expect(guidelines.entrySignals).toBeDefined();
       expect(guidelines.exitCriteria).toBeDefined();
       expect(guidelines.riskManagement).toBeDefined();
-      expect(guidelines.version).toBeDefined();
+      expect(guidelines.version).toBe('1.0.0');
       expect(guidelines.lastUpdated).toBeInstanceOf(Date);
       expect(guidelines.filePath).toBe(path.resolve(testGuidelinesPath));
     });
@@ -338,6 +390,13 @@ describe('GuidelinesManager', () => {
         .rejects.toThrow(GuidelinesManagerError);
     });
 
+    test('should handle invalid YAML format', async () => {
+      mockFs.readFile.mockResolvedValue('invalid: yaml: content: [unclosed');
+      
+      await expect(guidelinesManager.loadGuidelines())
+        .rejects.toThrow(GuidelinesManagerError);
+    });
+
     test('should store current guidelines after successful load', async () => {
       const guidelines = await guidelinesManager.loadGuidelines();
       
@@ -362,7 +421,7 @@ describe('GuidelinesManager', () => {
         // Missing entrySignals, exitCriteria, riskManagement
         lastUpdated: new Date(),
         version: '1.0.0',
-        filePath: 'test.md'
+        filePath: 'test.yaml'
       } as TradingGuidelines;
       
       const validation = guidelinesManager.validateGuidelines(incompleteGuidelines);
@@ -460,13 +519,14 @@ describe('GuidelinesManager', () => {
       expect(validation.warnings).toContain('No trailing stop rules defined');
     });
   });
+
   describe('Guidelines Reloading', () => {
     test('should reload guidelines successfully', async () => {
       // Load initial guidelines
       await guidelinesManager.loadGuidelines();
       
       // Modify mock content
-      const modifiedContent = mockGuidelinesContent.replace('1,000,000 shares', '2,000,000 shares');
+      const modifiedContent = mockGuidelinesContent.replace('minimumAverageDailyVolume: 1000000', 'minimumAverageDailyVolume: 2000000');
       mockFs.readFile.mockResolvedValue(modifiedContent);
       
       // Reload guidelines
@@ -548,7 +608,7 @@ describe('GuidelinesManager', () => {
 
     test('should return null when no guidelines loaded', () => {
       const freshManager = new GuidelinesManager(loggingService, {
-        guidelinesFilePath: 'test.md',
+        guidelinesFilePath: 'test.yaml',
         watchForChanges: false,
         backupOnLoad: false,
         validateOnLoad: false
@@ -571,31 +631,33 @@ describe('GuidelinesManager', () => {
       
       // Mock invalid content that will fail validation
       const invalidContent = `
-# Invalid Guidelines
-## Stock Selection
-- Minimum Average Daily Volume: -1000 shares
-- Maximum Daily Loss: 150% of portfolio
+version: "1.0.0"
+stockSelection:
+  liquidityRequirements:
+    minimumAverageDailyVolume: -1000
+entrySignals: {}
+exitCriteria: {}
+riskManagement:
+  portfolioRules:
+    maxDailyLossPercent: 150
 `;
       mockFs.readFile.mockResolvedValue(invalidContent);
       
       // Try to reload - should return last valid guidelines
       const reloadedGuidelines = await guidelinesManager.reloadGuidelines();
       
-      // Should return the same valid guidelines (by reference or deep equality)
+      // Should return the same valid guidelines
       expect(reloadedGuidelines.version).toBe(validGuidelines.version);
       expect(reloadedGuidelines.stockSelection.liquidityRequirements.minimumAverageDailyVolume)
         .toBe(validGuidelines.stockSelection.liquidityRequirements.minimumAverageDailyVolume);
     });
 
-    test('should handle parsing errors gracefully', async () => {
-      // Mock content that will cause parsing issues
-      mockFs.readFile.mockResolvedValue('# Invalid Guidelines\nNo proper structure');
+    test('should handle YAML parsing errors gracefully', async () => {
+      // Mock content with invalid YAML syntax
+      mockFs.readFile.mockResolvedValue('invalid: yaml: [unclosed bracket');
       
-      const guidelines = await guidelinesManager.loadGuidelines();
-      
-      // Should still return a guidelines object with defaults
-      expect(guidelines).toBeDefined();
-      expect(guidelines.stockSelection).toBeDefined();
+      await expect(guidelinesManager.loadGuidelines()).rejects.toThrow(GuidelinesManagerError);
+      await expect(guidelinesManager.loadGuidelines()).rejects.toThrow('Failed to parse guidelines from YAML');
     });
 
     test('should handle validation errors during load', async () => {
@@ -608,12 +670,17 @@ describe('GuidelinesManager', () => {
       
       const manager = new GuidelinesManager(loggingService, config);
       
-      // Mock content that will fail validation - create invalid guidelines with negative values
+      // Mock content that will fail validation
       const invalidGuidelines = `
-# Invalid Guidelines
-## Stock Selection
-- Minimum Average Daily Volume: -1000 shares
-- Maximum Daily Loss: 150% of portfolio
+version: "1.0.0"
+stockSelection:
+  liquidityRequirements:
+    minimumAverageDailyVolume: -1000
+entrySignals: {}
+exitCriteria: {}
+riskManagement:
+  portfolioRules:
+    maxDailyLossPercent: 150
 `;
       mockFs.readFile.mockResolvedValue(invalidGuidelines);
       
@@ -739,7 +806,7 @@ describe('GuidelinesManager Factory Function', () => {
 
   test('should create manager with custom configuration', () => {
     const customConfig = {
-      guidelinesFilePath: 'custom-guidelines.md',
+      guidelinesFilePath: 'custom-guidelines.yaml',
       watchForChanges: false,
       validateOnLoad: false
     };
@@ -751,7 +818,7 @@ describe('GuidelinesManager Factory Function', () => {
 
   test('should merge custom config with defaults', () => {
     const partialConfig = {
-      guidelinesFilePath: 'partial-config.md'
+      guidelinesFilePath: 'partial-config.yaml'
     };
     
     const manager = createGuidelinesManager(loggingService, partialConfig);

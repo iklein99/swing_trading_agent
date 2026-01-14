@@ -7,7 +7,7 @@ The Swing Trading Agent is an autonomous trading system that executes swing trad
 ## Glossary
 
 - **Trading_Agent**: The autonomous system that executes trading decisions based on LLM reasoning and predefined trading guidelines
-- **Trading_Guidelines**: The comprehensive set of rules and criteria stored in `artifacts/swing_trading_guidelines.md` that define stock selection, entry/exit criteria, risk management, and position sizing rules
+- **Trading_Guidelines**: The comprehensive set of rules and criteria stored in `artifacts/swing_trading_guidelines.yaml` that define stock selection, entry/exit criteria, risk management, and position sizing rules
 - **Guidelines_Manager**: Component responsible for loading, validating, and providing access to trading guidelines from the configuration file
 - **Portfolio_Manager**: Component responsible for tracking positions, calculating performance metrics, and enforcing position sizing rules
 - **Signal_Generator**: LLM-powered component that analyzes market data and generates buy/sell signals based on the loaded trading guidelines
@@ -37,7 +37,7 @@ The Swing Trading Agent is an autonomous trading system that executes swing trad
 
 #### Acceptance Criteria
 
-1. WHEN the system starts, THE Guidelines_Manager SHALL load trading guidelines from the `artifacts/swing_trading_guidelines.md` file
+1. WHEN the system starts, THE Guidelines_Manager SHALL load trading guidelines from the `artifacts/swing_trading_guidelines.yaml` file
 2. WHEN the guidelines file is updated, THE Guidelines_Manager SHALL reload the guidelines without requiring system restart
 3. WHEN loading guidelines, THE Guidelines_Manager SHALL validate all required sections are present and properly formatted
 4. WHEN guidelines validation fails, THE Trading_Agent SHALL log the error and continue using the last valid guidelines
