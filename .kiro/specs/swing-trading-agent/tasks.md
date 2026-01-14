@@ -221,7 +221,7 @@
   - Verify risk calculations are correct with different guidelines configurations
   - Ensure all tests pass before proceeding
 
-- [ ] 9. Implement and test signal generator with guidelines integration
+- [x] 9. Implement and test signal generator with guidelines integration
   - Create SignalGenerator class with guidelines-based signal generation
   - Implement stock screening using guidelines selection criteria
   - Add entry signal validation based on guidelines technical requirements
@@ -230,7 +230,7 @@
   - Test signal generation with various guidelines configurations
   - _Requirements: 5.2, 5.3, 5.5_
 
-- [ ] 9.1 Test signal generator functionality
+- [x] 9.1 Test signal generator functionality
   - Write unit tests for guidelines-based signal generation logic
   - Test stock screening using guidelines criteria
   - Test signal validation against guidelines requirements

@@ -16,14 +16,7 @@ export {
 export type { 
   TradingGuidelines, 
   GuidelinesManagerConfig, 
-  GuidelinesValidationResult,
-  LiquidityRequirements,
-  VolatilityMetrics,
-  PriceRange,
-  EntrySignal,
-  PortfolioRiskRules,
-  StopLossRules,
-  ProfitTargetMethods
+  GuidelinesValidationResult
 } from './guidelines-manager';
 export { 
   PortfolioManager, 
@@ -48,3 +41,11 @@ export type {
   PositionRisk,
   RiskEvent
 } from './risk-manager';
+export {
+  SignalGenerator,
+  SignalGeneratorError,
+  createSignalGenerator
+} from './signal-generator';
+export type {
+  SignalGeneratorConfig
+} from './signal-generator';

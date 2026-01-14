@@ -1,0 +1,240 @@
+{
+  "stockSelection": {
+    "liquidityRequirements": {
+      "minimumAverageDailyVolume": 1000000,
+      "minimumMarketCap": 500000000,
+      "maxBidAskSpreadPercent": 0.5
+    },
+    "volatilityMetrics": {
+      "atrRange": {
+        "min": 2,
+        "max": 8
+      },
+      "historicalVolatilityRange": {
+        "min": 20,
+        "max": 60
+      },
+      "betaRange": {
+        "min": 0.8,
+        "max": 2
+      }
+    },
+    "priceRange": {
+      "minPrice": 10,
+      "maxPrice": 500
+    },
+    "technicalSetupRequirements": {
+      "requireClearTrend": true,
+      "requireSupportResistance": true,
+      "requireVolumeConfirmation": true,
+      "maxATRExtension": 3
+    },
+    "fundamentalFilters": {
+      "avoidEarningsWithinDays": 5,
+      "checkMajorNews": true,
+      "requirePositiveSectorStrength": true,
+      "avoidFinancialDistress": true
+    }
+  },
+  "entrySignals": {
+    "longEntries": [
+      {
+        "name": "Breakout Entry",
+        "type": "BREAKOUT",
+        "conditions": [
+          "Price breaks above resistance",
+          "Volume >150% of average",
+          "Close above resistance for 2 periods"
+        ],
+        "volumeRequirement": 1.5,
+        "confirmationRequired": true,
+        "riskRewardRatio": 2
+      },
+      {
+        "name": "Pullback Entry",
+        "type": "PULLBACK",
+        "conditions": [
+          "Stock in uptrend",
+          "Price pulls back to support",
+          "Reversal signal present"
+        ],
+        "volumeRequirement": 1,
+        "confirmationRequired": true,
+        "riskRewardRatio": 2
+      },
+      {
+        "name": "Moving Average Bounce",
+        "type": "MOVING_AVERAGE_BOUNCE",
+        "conditions": [
+          "Price approaches MA",
+          "RSI oversold",
+          "Price moves away from MA"
+        ],
+        "volumeRequirement": 1,
+        "confirmationRequired": false,
+        "riskRewardRatio": 2
+      },
+      {
+        "name": "Momentum Entry",
+        "type": "MOMENTUM",
+        "conditions": [
+          "MACD crosses above signal",
+          "RSI crosses above 50",
+          "Price above VWAP"
+        ],
+        "volumeRequirement": 1,
+        "confirmationRequired": false,
+        "riskRewardRatio": 2
+      }
+    ],
+    "shortEntries": [
+      {
+        "name": "Breakdown Entry",
+        "type": "BREAKOUT",
+        "conditions": [
+          "Price breaks below support",
+          "Volume >150% of average",
+          "Close below support for 2 periods"
+        ],
+        "volumeRequirement": 1.5,
+        "confirmationRequired": true,
+        "riskRewardRatio": 2
+      }
+    ],
+    "timingRules": {
+      "avoidFirstMinutes": 15,
+      "avoidLastMinutes": 15,
+      "optimalWindowStart": "10:00 AM",
+      "optimalWindowEnd": "3:30 PM"
+    },
+    "positionSizing": {
+      "riskPerTradePercent": 2,
+      "maxPositionPercent": 10,
+      "maxCorrelatedPositions": 3,
+      "maxSectorPositions": 3
+    }
+  },
+  "exitCriteria": {
+    "profitTargets": [
+      {
+        "name": "ATR-Based Targets",
+        "method": "ATR_BASED",
+        "targets": [
+          {
+            "level": 1,
+            "calculation": "Entry + (1.5 × ATR)",
+            "exitPercentage": 33
+          },
+          {
+            "level": 2,
+            "calculation": "Entry + (2.5 × ATR)",
+            "exitPercentage": 33
+          },
+          {
+            "level": 3,
+            "calculation": "Entry + (4.0 × ATR)",
+            "exitPercentage": 34
+          }
+        ],
+        "partialExitStrategy": {
+          "scaleOutApproach": true,
+          "target1ExitPercent": 33,
+          "target2ExitPercent": 33,
+          "trailRemainder": true
+        }
+      },
+      {
+        "name": "Risk/Reward Ratio",
+        "method": "RISK_REWARD",
+        "targets": [
+          {
+            "level": 1,
+            "calculation": "2:1 R:R minimum",
+            "exitPercentage": 50
+          },
+          {
+            "level": 2,
+            "calculation": "3:1 R:R preferred",
+            "exitPercentage": 50
+          }
+        ],
+        "partialExitStrategy": {
+          "scaleOutApproach": true,
+          "target1ExitPercent": 50,
+          "target2ExitPercent": 50,
+          "trailRemainder": true
+        }
+      }
+    ],
+    "stopLosses": {
+      "methods": [
+        {
+          "name": "Below Support",
+          "type": "BELOW_SUPPORT",
+          "calculation": "1-2% below support level",
+          "bufferPercent": 2
+        },
+        {
+          "name": "ATR-Based",
+          "type": "ATR_BASED",
+          "calculation": "Entry - (1.0-1.5 × ATR)",
+          "bufferPercent": 0
+        },
+        {
+          "name": "Percentage",
+          "type": "PERCENTAGE",
+          "calculation": "5-8% below entry",
+          "bufferPercent": 8
+        }
+      ],
+      "maxRiskPercent": 2,
+      "breakEvenRule": {
+        "activateAtRiskRewardRatio": 1.5,
+        "moveToBreakEven": true
+      },
+      "timeBasedStop": {
+        "maxHoldingDays": 15,
+        "evaluateAtTimeLimit": true
+      }
+    },
+    "trailingStops": {
+      "activationTrigger": "After Target 1 or Target 2 hit",
+      "trailingAmount": "1.5-2.0 × ATR below current high",
+      "adjustmentFrequency": "DAILY",
+      "lockInProfitsAt": 1.5
+    },
+    "timeBasedExits": {
+      "maxHoldingPeriod": 15,
+      "evaluationCriteria": [
+        "No progress toward targets",
+        "Positive movement with trail stop"
+      ]
+    }
+  },
+  "riskManagement": {
+    "portfolioRules": {
+      "maxDailyLossPercent": 3,
+      "maxWeeklyLossPercent": 6,
+      "maxDrawdownPercent": 8,
+      "maxOpenPositions": 8,
+      "maxSectorExposurePercent": 30,
+      "maxPositionSizePercent": 10,
+      "riskPerTradePercent": 2
+    },
+    "tradeManagement": {
+      "noRevengeTrading": true,
+      "noAveragingDown": true,
+      "scaleInCarefully": true,
+      "reviewEachTrade": true
+    },
+    "marketEnvironment": {
+      "trendingMarketStrategy": "Favor breakout/breakdown strategies, wider targets",
+      "rangeBoundMarketStrategy": "Favor pullback strategies, tighter targets",
+      "highVolatilityAdjustments": "Reduce position sizes, widen stops, quicker profit-taking",
+      "lowVolatilityAdjustments": "Can use tighter stops, but expect smaller moves"
+    }
+  },
+  "lastUpdated": "2025-01-14T00:00:00.000Z",
+  "version": "1.0.0",
+  "filePath": "/Users/iklein99/Library/Mobile Documents/com~apple~CloudDocs/Node/swing-trade-agent/artifacts/swing_trading_guidelines.yaml"
+}
