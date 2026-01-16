@@ -49,3 +49,12 @@ export {
 export type {
   SignalGeneratorConfig
 } from './signal-generator';
+export {
+  ExitCriteriaMonitor,
+  ExitCriteriaMonitorError,
+  createExitCriteriaMonitor
+} from './exit-criteria-monitor';
+export type {
+  ExitCriteriaMonitorConfig,
+  ExitCheckResult
+} from './exit-criteria-monitor';
