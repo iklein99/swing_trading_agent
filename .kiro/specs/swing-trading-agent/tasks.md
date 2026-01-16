@@ -299,7 +299,7 @@
   - Verify error handling and status codes
   - Ensure all tests pass before proceeding
 
-- [ ] 14. Set up Next.js frontend with basic components
+- [x] 14. Set up Next.js frontend with basic components
   - Create Next.js TypeScript application
   - Set up basic routing and layout components
   - Create API client service for backend communication
@@ -307,7 +307,7 @@
   - Test frontend compilation and basic functionality
   - _Requirements: 6.1_
 
-- [ ] 14.1 Test frontend basic functionality
+- [x] 14.1 Test frontend basic functionality
   - Test Next.js application builds and runs correctly
   - Verify API client communication with backend
   - Test basic component rendering
