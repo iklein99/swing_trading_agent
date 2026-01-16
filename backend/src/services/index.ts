@@ -58,3 +58,11 @@ export type {
   ExitCriteriaMonitorConfig,
   ExitCheckResult
 } from './exit-criteria-monitor';
+export {
+  TradingEngine,
+  TradingEngineError,
+  createTradingEngine
+} from './trading-engine';
+export type {
+  TradingEngineConfig
+} from './trading-engine';

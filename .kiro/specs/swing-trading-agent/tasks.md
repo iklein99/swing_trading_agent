@@ -257,7 +257,7 @@
   - Verify exit signal generation with different guidelines configurations
   - Ensure all tests pass before proceeding
 
-- [ ] 11. Implement and test trading engine with guidelines integration
+- [x] 11. Implement and test trading engine with guidelines integration
   - Create TradingEngine class with guidelines-aware orchestration
   - Implement execution order: buy → sell → exit → update using guidelines
   - Add trading cycle with comprehensive logging and guidelines tracking
@@ -270,7 +270,7 @@
   - **Property 3: Execution order invariant**
   - **Validates: Requirements 4.1, 4.2, 4.3, 4.4**
 
-- [ ] 11.2 Test trading engine functionality
+- [x] 11.2 Test trading engine functionality
   - Write integration tests for complete trading cycles with guidelines
   - Test component orchestration and execution order with guidelines integration
   - Test guidelines hot-reload during trading cycles
