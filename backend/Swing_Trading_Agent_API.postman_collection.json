@@ -1,0 +1,588 @@
+{
+  "info": {
+    "name": "Swing Trading Agent API",
+    "description": "Complete API collection for the Swing Trading Agent backend service. Includes endpoints for system status, portfolio management, trade history, logging, guidelines management, and trading engine control.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "swing-trading-agent"
+  },
+  "item": [
+    {
+      "name": "Health & Status",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            },
+            "description": "Basic health check endpoint. Returns OK if server is running."
+          },
+          "response": []
+        },
+        {
+          "name": "Get System Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "status"]
+            },
+            "description": "Get the current status of the trading engine including uptime, cycles completed, and performance metrics."
+          },
+          "response": []
+        },
+        {
+          "name": "Get System Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "health"]
+            },
+            "description": "Get detailed health information for all system components including database, market data, LLM service, and risk manager."
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for checking system health and status"
+    },
+    {
+      "name": "Portfolio",
+      "item": [
+        {
+          "name": "Get Portfolio",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/portfolio",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "portfolio"]
+            },
+            "description": "Get complete portfolio information including total value, cash balance, positions, and P&L."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current Positions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/portfolio/positions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "portfolio", "positions"]
+            },
+            "description": "Get all current open positions with entry prices, current prices, and unrealized P&L."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Portfolio Metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/portfolio/metrics",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "portfolio", "metrics"]
+            },
+            "description": "Get portfolio metrics including total value, P&L, position count, cash percentage, and sector exposure."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Performance Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/portfolio/performance",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "portfolio", "performance"]
+            },
+            "description": "Get detailed performance statistics including win rate, profit factor, average win/loss, and drawdown."
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for portfolio management and performance tracking"
+    },
+    {
+      "name": "Trade History",
+      "item": [
+        {
+          "name": "Get All Trades",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/trades?limit=50",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trades"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "50",
+                  "description": "Number of trades to return"
+                },
+                {
+                  "key": "symbol",
+                  "value": "AAPL",
+                  "description": "Filter by stock symbol",
+                  "disabled": true
+                },
+                {
+                  "key": "action",
+                  "value": "BUY",
+                  "description": "Filter by action (BUY or SELL)",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Get trade history with optional filtering by symbol and action."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Trade by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/trades/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trades", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "trade-id-here",
+                  "description": "Trade ID"
+                }
+              ]
+            },
+            "description": "Get details for a specific trade by ID."
+          },
+          "response": []
+        },
+        {
+          "name": "Filter Trades by Symbol",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/trades?symbol=AAPL&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trades"],
+              "query": [
+                {
+                  "key": "symbol",
+                  "value": "AAPL"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "Get trades filtered by stock symbol."
+          },
+          "response": []
+        },
+        {
+          "name": "Filter Trades by Action",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/trades?action=BUY&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "trades"],
+              "query": [
+                {
+                  "key": "action",
+                  "value": "BUY"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "Get trades filtered by action (BUY or SELL)."
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for viewing trade history"
+    },
+    {
+      "name": "Logs",
+      "item": [
+        {
+          "name": "Get Logs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/logs?limit=100",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "logs"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "100",
+                  "description": "Number of logs to return"
+                },
+                {
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Pagination offset",
+                  "disabled": true
+                },
+                {
+                  "key": "level",
+                  "value": "ERROR",
+                  "description": "Filter by log level (DEBUG, INFO, WARN, ERROR, FATAL)",
+                  "disabled": true
+                },
+                {
+                  "key": "component",
+                  "value": "TRADING_ENGINE",
+                  "description": "Filter by component",
+                  "disabled": true
+                },
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01T00:00:00Z",
+                  "description": "Start date (ISO format)",
+                  "disabled": true
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-01-31T23:59:59Z",
+                  "description": "End date (ISO format)",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Query logs with optional filtering by level, component, and date range."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Error Logs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/logs?level=ERROR&limit=50",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "logs"],
+              "query": [
+                {
+                  "key": "level",
+                  "value": "ERROR"
+                },
+                {
+                  "key": "limit",
+                  "value": "50"
+                }
+              ]
+            },
+            "description": "Get only error-level logs."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Logs by Component",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/logs?component=TRADING_ENGINE&limit=50",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "logs"],
+              "query": [
+                {
+                  "key": "component",
+                  "value": "TRADING_ENGINE"
+                },
+                {
+                  "key": "limit",
+                  "value": "50"
+                }
+              ]
+            },
+            "description": "Get logs filtered by component."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Log Summary",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/logs/summary",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "logs", "summary"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01T00:00:00Z",
+                  "description": "Start date (ISO format)",
+                  "disabled": true
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-01-31T23:59:59Z",
+                  "description": "End date (ISO format)",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Get aggregated log statistics including error counts, component breakdown, and top errors."
+          },
+          "response": []
+        },
+        {
+          "name": "Get LLM Interactions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/logs/llm?limit=50",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "logs", "llm"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "50"
+                },
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01T00:00:00Z",
+                  "disabled": true
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-01-31T23:59:59Z",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Get LLM interaction logs including prompts, responses, and processing times."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Trading Cycle Logs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/logs/cycles?limit=50",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "logs", "cycles"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "50"
+                }
+              ]
+            },
+            "description": "Get logs for trading cycle executions."
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for viewing and querying system logs"
+    },
+    {
+      "name": "Guidelines Management",
+      "item": [
+        {
+          "name": "Get Current Guidelines",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/guidelines",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "guidelines"]
+            },
+            "description": "Get the currently loaded trading guidelines including stock selection criteria, entry/exit rules, and risk management parameters."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Guidelines Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/guidelines/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "guidelines", "status"]
+            },
+            "description": "Get the loading status and validation state of the guidelines."
+          },
+          "response": []
+        },
+        {
+          "name": "Reload Guidelines",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/guidelines/reload",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "guidelines", "reload"]
+            },
+            "description": "Reload guidelines from the configuration file without restarting the server. Useful for testing guideline changes."
+          },
+          "response": []
+        },
+        {
+          "name": "Validate Current Guidelines",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/guidelines/validate",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "guidelines", "validate"]
+            },
+            "description": "Validate the currently loaded guidelines structure and return validation results."
+          },
+          "response": []
+        },
+        {
+          "name": "Validate Custom Guidelines",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"guidelines\": {\n    \"version\": \"1.0.0\",\n    \"stockSelection\": {\n      \"liquidityRequirements\": {\n        \"minimumAverageDailyVolume\": 1000000,\n        \"minimumMarketCap\": 500000000,\n        \"maxBidAskSpreadPercent\": 0.5\n      }\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/guidelines/validate",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "guidelines", "validate"]
+            },
+            "description": "Validate custom guidelines by providing them in the request body."
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for managing and validating trading guidelines"
+    },
+    {
+      "name": "Trading Engine Control",
+      "item": [
+        {
+          "name": "Start Engine",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/engine/start",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "engine", "start"]
+            },
+            "description": "Start the trading engine. Initializes all components and begins monitoring."
+          },
+          "response": []
+        },
+        {
+          "name": "Stop Engine",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/engine/stop",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "engine", "stop"]
+            },
+            "description": "Stop the trading engine. Halts all trading activities."
+          },
+          "response": []
+        },
+        {
+          "name": "Pause Engine",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/engine/pause",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "engine", "pause"]
+            },
+            "description": "Pause the trading engine. Can be resumed later."
+          },
+          "response": []
+        },
+        {
+          "name": "Resume Engine",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/engine/resume",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "engine", "resume"]
+            },
+            "description": "Resume a paused trading engine."
+          },
+          "response": []
+        },
+        {
+          "name": "Execute Trading Cycle",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/engine/cycle",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "engine", "cycle"]
+            },
+            "description": "Manually trigger a single trading cycle execution. Processes buy signals, sell signals, exit criteria, and updates portfolio."
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for controlling the trading engine"
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3001",
+      "type": "string"
+    }
+  ]
+}

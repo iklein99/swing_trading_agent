@@ -415,3 +415,10 @@ export class MarketDataService implements MarketDataServiceInterface {
     console.log('MarketDataService disconnected');
   }
 }
+
+/**
+ * Factory function to create a MarketDataService instance
+ */
+export function createMarketDataService(logger: LoggingService): MarketDataService {
+  return new MarketDataService(logger);
+}
