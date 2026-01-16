@@ -64,6 +64,19 @@ export interface Position {
   sector?: string;
 }
 
+export interface Trade {
+  id: string;
+  symbol: string;
+  action: 'BUY' | 'SELL';
+  quantity: number;
+  price: number;
+  timestamp: Date;
+  reasoning: string;
+  signalId: string;
+  fees: number;
+  status: 'PENDING' | 'EXECUTED' | 'FAILED';
+}
+
 export interface PortfolioMetrics {
   totalValue: number;
   totalPnL: number;
@@ -227,6 +240,21 @@ export class ApiClient {
 
   async executeTradingCycle(): Promise<{ success: boolean; result: any }> {
     const response = await this.client.post('/api/engine/cycle');
+    return response.data;
+  }
+
+  // Trades
+  async getTradeHistory(params?: {
+    limit?: number;
+    symbol?: string;
+    action?: 'BUY' | 'SELL';
+  }): Promise<{ trades: Trade[]; total: number; limit: number; filters: any }> {
+    const response = await this.client.get('/api/trades', { params });
+    return response.data;
+  }
+
+  async getTradeById(id: string): Promise<Trade> {
+    const response = await this.client.get(`/api/trades/${id}`);
     return response.data;
   }
 

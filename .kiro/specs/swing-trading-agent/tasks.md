@@ -313,7 +313,7 @@
   - Test basic component rendering
   - Ensure frontend works before adding complexity
 
-- [ ] 15. Implement portfolio and trade views
+- [x] 15. Implement portfolio and trade views
   - Create portfolio status component with current positions
   - Add trade history view with basic filtering
   - Implement performance metrics display

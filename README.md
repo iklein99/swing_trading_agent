@@ -65,11 +65,81 @@ The GuidelinesManager service watches the configuration file for changes and aut
 
 ## Getting Started
 
-This project is currently in development. See the implementation plan in `.kiro/specs/swing-trading-agent/tasks.md` for development progress.
+### Prerequisites
+
+- Node.js 18+ and npm
+- TypeScript 5.3+
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
+
+```bash
+# Install root dependencies
+npm install
+
+# Install backend dependencies
+cd backend
+npm install
+
+# Install frontend dependencies
+cd ../frontend
+npm install
+```
+
+### Running the Application
+
+#### Start the Backend API Server
+
+```bash
+cd backend
+npm run dev:server
+```
+
+The backend API will start on http://localhost:3001
+
+#### Start the Frontend Development Server
+
+In a separate terminal:
+
+```bash
+cd frontend
+npm run dev
+```
+
+The frontend will start on http://localhost:3000
+
+#### Access the Application
+
+Open your browser and navigate to:
+- **Dashboard**: http://localhost:3000
+- **Portfolio**: http://localhost:3000/portfolio
+- **Trades**: http://localhost:3000/trades
+
+### Running Tests
+
+#### Backend Tests
+
+```bash
+cd backend
+npm test
+```
+
+#### Frontend Tests
+
+```bash
+cd frontend
+npm test
+```
 
 ## Development
 
 The project follows an incremental development approach with component-by-component testing. Each component is built and tested independently before integration.
+
+### Development Status
+
+See the implementation plan in `.kiro/specs/swing-trading-agent/tasks.md` for current development progress and completed features.
 
 ## License
 

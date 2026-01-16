@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { apiClient, EngineStatus, SystemHealth, PortfolioMetrics } from '@/lib/api-client';
 import Card from '@/components/Card';
 import StatusBadge from '@/components/StatusBadge';
@@ -106,6 +107,24 @@ export default function Home() {
           <p className="text-gray-600">
             Monitor your autonomous trading system in real-time
           </p>
+        </div>
+
+        {/* Quick Navigation */}
+        <div className="mb-8 flex gap-4">
+          <Link
+            href="/portfolio"
+            className="px-6 py-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition-all"
+          >
+            <div className="text-sm font-medium text-gray-900">Portfolio</div>
+            <div className="text-xs text-gray-500">View positions</div>
+          </Link>
+          <Link
+            href="/trades"
+            className="px-6 py-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition-all"
+          >
+            <div className="text-sm font-medium text-gray-900">Trades</div>
+            <div className="text-xs text-gray-500">Trade history</div>
+          </Link>
         </div>
 
         {/* Status Overview */}
