@@ -277,13 +277,13 @@
   - Verify comprehensive logging of all operations and guidelines usage
   - Ensure all tests pass before proceeding
 
-- [ ] 12. Checkpoint - Core backend functionality complete
+- [x] 12. Checkpoint - Core backend functionality complete
   - Run all unit and property tests to ensure system stability
   - Verify all core components work together correctly
   - Test basic trading workflows end-to-end
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 13. Implement REST API with guidelines management
+- [x] 13. Implement REST API with guidelines management
   - Create Express.js API server with essential endpoints
   - Add endpoints for system status and basic portfolio data
   - Implement simple trade history retrieval
@@ -292,7 +292,7 @@
   - Test API endpoints with unit tests including guidelines endpoints
   - _Requirements: 6.1, 6.2, 6.3_
 
-- [ ] 13.1 Test REST API functionality
+- [x] 13.1 Test REST API functionality
   - Write unit tests for all API endpoints including guidelines management
   - Test request/response data validation
   - Test guidelines reload and validation endpoints
